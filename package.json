@@ -4,14 +4,20 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --host localhost --port 3008",
+    "dev:3007": "nuxt dev --host localhost --port 3007",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "mysql2": "^3.15.3",
     "nuxt": "^3.20.2",
     "vue": "^3.5.25",
     "vue-router": "^4.6.3"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "tsx": "^4.21.0"
   }
 }
