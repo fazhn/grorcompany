@@ -63,13 +63,10 @@
                 <label class="flex items-center gap-2 cursor-pointer">
                   <span class="text-sm font-medium text-gray-700">Modo Mantenimiento</span>
                   <div class="relative">
-                    <input
-                      type="checkbox"
-                      v-model="maintenanceMode"
-                      @change="toggleMaintenance"
-                      class="sr-only peer"
-                    />
-                    <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+                    <input type="checkbox" v-model="maintenanceMode" @change="toggleMaintenance" class="sr-only peer" />
+                    <div
+                      class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500">
+                    </div>
                   </div>
                   <span v-if="maintenanceMode" class="text-xs font-semibold text-orange-600">ACTIVO</span>
                   <span v-else class="text-xs font-semibold text-gray-500">INACTIVO</span>
@@ -111,11 +108,8 @@
           </button>
 
           <!-- Botón nuevo producto cuando estás editando -->
-          <button
-            v-if="editingProductId && activeTab === 'crear'"
-            @click="resetForm"
-            class="ml-auto px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all duration-300 border border-primary-600 shadow-lg shadow-primary-600/20 flex items-center gap-2"
-          >
+          <button v-if="editingProductId && activeTab === 'crear'" @click="resetForm"
+            class="ml-auto px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all duration-300 border border-primary-600 shadow-lg shadow-primary-600/20 flex items-center gap-2">
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
@@ -131,23 +125,23 @@
               <h2 class="text-2xl font-bold text-gray-900 tracking-tight">
                 {{ editingProductId ? 'Editar Producto' : 'Agregar Nuevo Producto' }}
               </h2>
-              <button
-                v-if="editingProductId"
-                @click="cancelEdit"
-                class="text-sm text-gray-500 hover:text-gray-700 mt-1 flex items-center gap-1"
-              >
+              <button v-if="editingProductId" @click="cancelEdit"
+                class="text-sm text-gray-500 hover:text-gray-700 mt-1 flex items-center gap-1">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
                 Cancelar edición
               </button>
             </div>
             <div class="w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center">
-              <svg v-if="!editingProductId" class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg v-if="!editingProductId" class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
               <svg v-else class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
             </div>
           </div>
@@ -202,7 +196,9 @@
               <div class="flex items-center">
                 <label class="relative inline-flex items-center cursor-pointer">
                   <input type="checkbox" v-model="form.es_nuevo" class="sr-only peer">
-                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                  <div
+                    class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500">
+                  </div>
                   <span class="ml-3 text-sm font-semibold text-gray-700">Marcar como "Nuevo"</span>
                 </label>
               </div>
@@ -212,8 +208,7 @@
                 <label for="descuento" class="block text-sm font-semibold text-gray-700 mb-2">Descuento (%)</label>
                 <div class="relative">
                   <input id="descuento" v-model.number="form.descuento" type="number" step="0.01" min="0" max="100"
-                    placeholder="0"
-                    @input="calcularPrecioOriginal"
+                    placeholder="0" @input="calcularPrecioOriginal"
                     class="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all duration-300" />
                   <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">%</span>
                 </div>
@@ -226,11 +221,12 @@
               <div>
                 <label for="stock" class="block text-sm font-semibold text-gray-700 mb-2">Stock Disponible</label>
                 <div class="relative">
-                  <input id="stock" v-model.number="form.stock" type="number" min="0"
-                    placeholder="0"
+                  <input id="stock" v-model.number="form.stock" type="number" min="0" placeholder="0"
                     class="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all duration-300" />
-                  <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                   </svg>
                 </div>
                 <p class="text-xs text-gray-500 mt-2">
@@ -248,15 +244,12 @@
               <!-- Vista previa cuando hay imagen -->
               <div v-if="imagePreview" class="space-y-3">
                 <div class="relative w-full max-w-xs">
-                  <div class="rounded-2xl overflow-hidden border-2 border-gray-200 shadow-md">
-                    <img :src="imagePreview" alt="Preview" class="w-full h-48 object-cover" />
+                  <div class="rounded-2xl overflow-hidden border-2 border-gray-200 shadow-md bg-white">
+                    <img :src="imagePreview" alt="Preview" class="w-full h-48 object-contain" />
                   </div>
-                  <button
-                    type="button"
-                    @click="removeImage"
+                  <button type="button" @click="removeImage"
                     class="absolute top-2 right-2 p-2 bg-red-500 hover:bg-red-600 text-white rounded-lg shadow-lg transition-all duration-200 hover:scale-105"
-                    title="Eliminar imagen"
-                  >
+                    title="Eliminar imagen">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
@@ -272,23 +265,16 @@
 
               <!-- Área de carga cuando no hay imagen -->
               <div v-else>
-                <input
-                  id="file-upload"
-                  type="file"
-                  accept="image/*"
-                  @change="handleFileChange"
-                  class="hidden"
-                />
-                <label
-                  for="file-upload"
-                  class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50 transition-all duration-300 hover:bg-gray-100 hover:border-primary-500 cursor-pointer group"
-                >
+                <input id="file-upload" type="file" accept="image/*" @change="handleFileChange" class="hidden" />
+                <label for="file-upload"
+                  class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-gray-300 rounded-2xl bg-gray-50 transition-all duration-300 hover:bg-gray-100 hover:border-primary-500 cursor-pointer group">
                   <svg class="w-12 h-12 text-gray-400 mb-3 group-hover:text-primary-500 transition-colors" fill="none"
                     viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
-                  <p class="text-sm font-medium text-gray-600 group-hover:text-gray-900 transition-colors">Click para subir una imagen</p>
+                  <p class="text-sm font-medium text-gray-600 group-hover:text-gray-900 transition-colors">Click para
+                    subir una imagen</p>
                   <p class="text-xs text-gray-400 mt-1">PNG, JPG o WEBP</p>
                 </label>
               </div>
@@ -325,7 +311,8 @@
             <div class="flex gap-4 pt-6 border-t border-gray-100">
               <button type="submit" :disabled="isSubmitting"
                 class="flex-1 px-6 py-4 bg-gray-900 hover:bg-black disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all duration-300 shadow-lg shadow-gray-900/20 hover:shadow-gray-900/40 hover:-translate-y-0.5">
-                {{ isSubmitting ? (editingProductId ? 'Actualizando...' : 'Guardando...') : (editingProductId ? 'Actualizar Producto' : 'Guardar Producto') }}
+                {{ isSubmitting ? (editingProductId ? 'Actualizando...' : 'Guardando...') : (editingProductId ?
+                  'Actualizar Producto' : 'Guardar Producto') }}
               </button>
               <button type="button" @click="cancelEdit"
                 class="px-6 py-4 bg-white hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition-all duration-300 border border-gray-200 hover:border-gray-300">
@@ -386,10 +373,10 @@
               class="bg-white border border-gray-100 rounded-2xl p-4 flex gap-4 sm:gap-6 hover:shadow-lg transition-all duration-300 group">
               <!-- Imagen -->
               <div
-                class="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-gray-50 border border-gray-100">
+                class="flex-shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-white border border-gray-100 flex items-center justify-center p-1">
                 <img v-if="producto.imagen" :src="producto.imagen" :alt="producto.titulo"
-                  class="w-full h-full object-cover" />
-                <div v-else class="w-full h-full flex items-center justify-center">
+                  class="w-full h-full object-contain" />
+                <div v-else class="w-full h-full flex items-center justify-center bg-gray-50">
                   <svg class="w-8 h-8 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                       d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
