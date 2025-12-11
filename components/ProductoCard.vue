@@ -1,8 +1,8 @@
 <template>
-  <div
-    class="group bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1">
+  <NuxtLink :to="`/producto/${producto.id}`"
+    class="group bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 block">
     <!-- Imagen del producto -->
-    <div class="relative bg-gray-50 aspect-square overflow-hidden cursor-pointer" @click="emit('ver', producto)">
+    <div class="relative bg-gray-50 aspect-square overflow-hidden">
       <img v-if="producto.imagen" :src="producto.imagen" :alt="producto.titulo"
         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
       <div v-else class="flex items-center justify-center h-full">
@@ -12,13 +12,12 @@
         </svg>
       </div>
 
-      <!-- Quick Action Overlay - Hidden on touch, visible on hover for desktop -->
+      <!-- Quick Action Overlay -->
       <div
-        class="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center bg-gradient-to-t from-black/50 to-transparent pointer-events-none md:pointer-events-auto">
-        <button @click.stop="emit('ver', producto)"
-          class="bg-white text-gray-900 px-6 py-2.5 rounded-full font-medium text-sm shadow-lg hover:bg-gray-50 transform hover:scale-105 transition-all pointer-events-auto">
-          Vista Rápida
-        </button>
+        class="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center bg-gradient-to-t from-black/50 to-transparent">
+        <span class="bg-white text-gray-900 px-6 py-2.5 rounded-full font-medium text-sm shadow-lg">
+          Ver Detalles
+        </span>
       </div>
     </div>
 
@@ -29,8 +28,7 @@
           {{ producto.categoria || 'Novedad' }}
         </p>
         <h3
-          class="text-gray-900 font-bold text-sm md:text-lg leading-tight group-hover:text-primary-600 transition-colors line-clamp-2 cursor-pointer"
-          @click="emit('ver', producto)">
+          class="text-gray-900 font-bold text-sm md:text-lg leading-tight group-hover:text-primary-600 transition-colors line-clamp-2">
           {{ producto.titulo }}
         </h3>
       </div>
@@ -52,7 +50,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </NuxtLink>
 </template>
 
 <script setup lang="ts">
@@ -69,8 +67,6 @@ interface Producto {
 const props = defineProps<{
   producto: Producto
 }>()
-
-const emit = defineEmits(['ver'])
 
 const formatPrecio = (precio: any) => {
   if (!precio) return '0.00'

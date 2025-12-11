@@ -74,14 +74,14 @@
       <!-- Main Content -->
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <!-- Tabs -->
-        <div class="flex gap-4 mb-8">
+        <div class="flex flex-wrap items-center gap-4 mb-8">
           <button @click="activeTab = 'crear'" :class="[
             'px-6 py-3 rounded-xl font-semibold transition-all duration-300 border',
             activeTab === 'crear'
               ? 'bg-gray-900 text-white border-gray-900 shadow-lg shadow-gray-900/20'
               : 'bg-white text-gray-600 hover:bg-gray-50 border-gray-200 hover:border-gray-300'
           ]">
-            Crear Producto
+            {{ editingProductId && activeTab === 'crear' ? 'Editando Producto' : 'Crear Producto' }}
           </button>
           <button @click="activeTab = 'gestionar'" :class="[
             'px-6 py-3 rounded-xl font-semibold transition-all duration-300 border',
@@ -91,16 +91,45 @@
           ]">
             Gestionar Productos
           </button>
+
+          <!-- Botón nuevo producto cuando estás editando -->
+          <button
+            v-if="editingProductId && activeTab === 'crear'"
+            @click="resetForm"
+            class="ml-auto px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-all duration-300 border border-primary-600 shadow-lg shadow-primary-600/20 flex items-center gap-2"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            Nuevo Producto
+          </button>
         </div>
 
         <!-- Tab: Crear Producto -->
         <div v-if="activeTab === 'crear'"
           class="bg-white border border-gray-100 rounded-3xl p-10 shadow-[0_8px_30px_rgb(0,0,0,0.04)]">
           <div class="flex items-center justify-between mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Agregar Nuevo Producto</h2>
+            <div>
+              <h2 class="text-2xl font-bold text-gray-900 tracking-tight">
+                {{ editingProductId ? 'Editar Producto' : 'Agregar Nuevo Producto' }}
+              </h2>
+              <button
+                v-if="editingProductId"
+                @click="cancelEdit"
+                class="text-sm text-gray-500 hover:text-gray-700 mt-1 flex items-center gap-1"
+              >
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Cancelar edición
+              </button>
+            </div>
             <div class="w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center">
-              <svg class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg v-if="!editingProductId" class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              <svg v-else class="w-6 h-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
             </div>
           </div>
@@ -233,11 +262,11 @@
             <div class="flex gap-4 pt-6 border-t border-gray-100">
               <button type="submit" :disabled="isSubmitting"
                 class="flex-1 px-6 py-4 bg-gray-900 hover:bg-black disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all duration-300 shadow-lg shadow-gray-900/20 hover:shadow-gray-900/40 hover:-translate-y-0.5">
-                {{ isSubmitting ? 'Guardando...' : 'Guardar Producto' }}
+                {{ isSubmitting ? (editingProductId ? 'Actualizando...' : 'Guardando...') : (editingProductId ? 'Actualizar Producto' : 'Guardar Producto') }}
               </button>
-              <button type="button" @click="resetForm"
+              <button type="button" @click="cancelEdit"
                 class="px-6 py-4 bg-white hover:bg-gray-50 text-gray-700 font-semibold rounded-xl transition-all duration-300 border border-gray-200 hover:border-gray-300">
-                Limpiar
+                {{ editingProductId ? 'Cancelar' : 'Limpiar' }}
               </button>
             </div>
 
@@ -320,17 +349,27 @@
                     </div>
                   </div>
 
-                  <button @click="eliminarProducto(producto.id)" :disabled="deletingId === producto.id"
-                    class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors group/delete"
-                    title="Eliminar producto">
-                    <svg v-if="deletingId !== producto.id" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                    <span v-else
-                      class="inline-block w-5 h-5 border-2 border-red-500 border-t-transparent rounded-full animate-spin"></span>
-                  </button>
+                  <div class="flex gap-2">
+                    <button @click="editarProducto(producto)"
+                      class="p-2 text-gray-400 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                      title="Editar producto">
+                      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </button>
+                    <button @click="eliminarProducto(producto.id)" :disabled="deletingId === producto.id"
+                      class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors group/delete"
+                      title="Eliminar producto">
+                      <svg v-if="deletingId !== producto.id" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      <span v-else
+                        class="inline-block w-5 h-5 border-2 border-red-500 border-t-transparent rounded-full animate-spin"></span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -368,6 +407,7 @@ const activeTab = ref<'crear' | 'gestionar'>('crear')
 const productos = ref<Producto[]>([])
 const loadingProductos = ref(false)
 const deletingId = ref<number | null>(null)
+const editingProductId = ref<number | null>(null)
 
 const form = ref({
   titulo: '',
@@ -450,7 +490,9 @@ const handleSubmit = async () => {
   submitMessage.value = ''
 
   try {
-    let imagePath = ''
+    let imagePath = form.value.imagen // Mantener imagen actual por defecto
+
+    // Si hay un nuevo archivo seleccionado, subirlo
     if (selectedFile.value) {
       const formData = new FormData()
       formData.append('file', selectedFile.value)
@@ -461,33 +503,49 @@ const handleSubmit = async () => {
       imagePath = uploadResponse.filename
     }
 
-    await $fetch('/api/productos', {
-      method: 'POST',
-      body: {
-        titulo: form.value.titulo,
-        descripcion: form.value.descripcion,
-        categoria: form.value.categoria,
-        imagen: imagePath,
-        colores: form.value.colores,
-        precio: form.value.precio
-      }
-    })
+    if (editingProductId.value) {
+      // Actualizar producto existente
+      await $fetch(`/api/productos/${editingProductId.value}`, {
+        method: 'PUT',
+        body: {
+          titulo: form.value.titulo,
+          descripcion: form.value.descripcion,
+          categoria: form.value.categoria,
+          imagen: imagePath,
+          colores: form.value.colores,
+          precio: form.value.precio
+        }
+      })
 
-    submitMessage.value = '✓ Producto creado exitosamente'
-    submitStatus.value = 'success'
-    resetForm()
+      submitMessage.value = '✓ Producto actualizado exitosamente'
+      submitStatus.value = 'success'
+    } else {
+      // Crear nuevo producto
+      await $fetch('/api/productos', {
+        method: 'POST',
+        body: {
+          titulo: form.value.titulo,
+          descripcion: form.value.descripcion,
+          categoria: form.value.categoria,
+          imagen: imagePath,
+          colores: form.value.colores,
+          precio: form.value.precio
+        }
+      })
 
-    // Recargar productos si estamos en el tab de gestionar
-    if (activeTab.value === 'gestionar') {
-      cargarProductos()
+      submitMessage.value = '✓ Producto creado exitosamente'
+      submitStatus.value = 'success'
     }
+
+    resetForm()
+    cargarProductos()
 
     setTimeout(() => {
       submitMessage.value = ''
     }, 3000)
   } catch (error) {
-    console.error('Error al crear producto:', error)
-    submitMessage.value = '✗ Error al crear el producto'
+    console.error('Error al guardar producto:', error)
+    submitMessage.value = editingProductId.value ? '✗ Error al actualizar el producto' : '✗ Error al crear el producto'
     submitStatus.value = 'error'
   } finally {
     isSubmitting.value = false
@@ -506,12 +564,40 @@ const resetForm = () => {
   colorInput.value = ''
   imagePreview.value = ''
   selectedFile.value = null
+  editingProductId.value = null
 
   // Reset file input
   const fileInput = document.getElementById('file-upload') as HTMLInputElement
   if (fileInput) {
     fileInput.value = ''
   }
+}
+
+// Función para editar producto
+const editarProducto = (producto: Producto) => {
+  form.value = {
+    titulo: producto.titulo,
+    descripcion: producto.descripcion,
+    categoria: producto.categoria,
+    imagen: producto.imagen,
+    colores: producto.colores || [],
+    precio: producto.precio
+  }
+  editingProductId.value = producto.id
+  imagePreview.value = producto.imagen
+  selectedFile.value = null
+  activeTab.value = 'crear'
+
+  // Scroll al top
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+// Función para cancelar edición
+const cancelEdit = () => {
+  if (editingProductId.value && !confirm('¿Descartar los cambios?')) {
+    return
+  }
+  resetForm()
 }
 
 // Cargar productos
@@ -598,6 +684,10 @@ watch(isAuthenticated, (newVal) => {
 watch(activeTab, (newTab) => {
   if (newTab === 'gestionar') {
     cargarProductos()
+    // Limpiar el estado de edición si existe
+    if (editingProductId.value) {
+      resetForm()
+    }
   }
 })
 </script>
