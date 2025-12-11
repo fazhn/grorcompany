@@ -25,12 +25,6 @@ RUN npm install --omit=dev
 # Copia la salida de la build
 COPY --from=build /app/.output ./.output
 
-# Copia el directorio public para archivos estáticos
-COPY --from=build /app/public ./public
-
-# Crea el directorio para imágenes si no existe
-RUN mkdir -p ./public/images/productos
-
 EXPOSE 3000
 
 CMD ["node", ".output/server/index.mjs"]
