@@ -57,7 +57,25 @@
               </div>
             </div>
 
-            <div class="flex gap-3">
+            <div class="flex items-center gap-3">
+              <!-- Modo Mantenimiento Toggle -->
+              <div class="flex items-center gap-3 px-4 py-2 bg-gray-50 rounded-xl border border-gray-200">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <span class="text-sm font-medium text-gray-700">Modo Mantenimiento</span>
+                  <div class="relative">
+                    <input
+                      type="checkbox"
+                      v-model="maintenanceMode"
+                      @change="toggleMaintenance"
+                      class="sr-only peer"
+                    />
+                    <div class="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary-500/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-orange-500"></div>
+                  </div>
+                  <span v-if="maintenanceMode" class="text-xs font-semibold text-orange-600">ACTIVO</span>
+                  <span v-else class="text-xs font-semibold text-gray-500">INACTIVO</span>
+                </label>
+              </div>
+
               <NuxtLink to="/"
                 class="px-5 py-2.5 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium rounded-xl transition-all duration-300 border border-gray-200">
                 Ver Catálogo
@@ -400,6 +418,9 @@ const isAuthenticated = ref(false)
 const loginForm = ref({ username: '', password: '' })
 const loginError = ref('')
 
+// Maintenance mode
+const maintenanceMode = ref(false)
+
 // Tab management
 const activeTab = ref<'crear' | 'gestionar'>('crear')
 
@@ -448,6 +469,47 @@ const handleLogout = () => {
   isAuthenticated.value = false
   loginForm.value = { username: '', password: '' }
   resetForm()
+}
+
+// Funciones de modo mantenimiento
+const loadMaintenanceStatus = async () => {
+  try {
+    const data = await $fetch<{ maintenanceMode: boolean }>('/api/settings/maintenance')
+    maintenanceMode.value = data.maintenanceMode
+  } catch (error) {
+    console.error('Error al cargar estado de mantenimiento:', error)
+  }
+}
+
+const toggleMaintenance = async () => {
+  try {
+    await $fetch('/api/settings/maintenance', {
+      method: 'POST',
+      body: {
+        enabled: maintenanceMode.value
+      }
+    })
+
+    submitMessage.value = maintenanceMode.value
+      ? '⚠️ Modo mantenimiento ACTIVADO'
+      : '✓ Modo mantenimiento DESACTIVADO'
+    submitStatus.value = maintenanceMode.value ? 'error' : 'success'
+
+    setTimeout(() => {
+      submitMessage.value = ''
+    }, 3000)
+  } catch (error) {
+    console.error('Error al cambiar modo mantenimiento:', error)
+    // Revertir el toggle si falla
+    maintenanceMode.value = !maintenanceMode.value
+
+    submitMessage.value = '✗ Error al cambiar modo mantenimiento'
+    submitStatus.value = 'error'
+
+    setTimeout(() => {
+      submitMessage.value = ''
+    }, 3000)
+  }
 }
 
 const handleFileChange = (event: Event) => {
@@ -665,6 +727,7 @@ onMounted(() => {
     if (auth === 'true') {
       isAuthenticated.value = true
       cargarProductos()
+      loadMaintenanceStatus()
     }
   }
 })
@@ -674,6 +737,7 @@ watch(isAuthenticated, (newVal) => {
     if (newVal) {
       localStorage.setItem('admin_auth', 'true')
       cargarProductos()
+      loadMaintenanceStatus()
     } else {
       localStorage.removeItem('admin_auth')
     }
