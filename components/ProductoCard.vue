@@ -117,7 +117,7 @@
 
 <script setup lang="ts">
 import { useCartStore } from '~/stores/cart'
-import { useToast } from 'vue-toastification'
+import Toast from 'vue-toastification'
 
 interface Producto {
   id: number
@@ -137,7 +137,7 @@ const props = defineProps<{
   producto: Producto
 }>()
 
-const toast = useToast()
+const toast = Toast.useToast()
 
 const formatPrecio = (precio: any) => {
   if (!precio) return '0.00'

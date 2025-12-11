@@ -384,7 +384,7 @@
 <script setup lang="ts">
 import { useProductsStore } from '~/stores/products'
 import { useCartStore } from '~/stores/cart'
-import { useToast } from 'vue-toastification'
+import Toast from 'vue-toastification'
 import type { Producto } from '~/stores/products'
 
 const route = useRoute()
@@ -393,7 +393,7 @@ const productId = Number(route.params.id)
 // Stores
 const productsStore = useProductsStore()
 const cartStore = useCartStore()
-const toast = useToast()
+const toast = Toast.useToast()
 
 // State
 const cantidad = ref(1)

@@ -445,9 +445,11 @@
 
 <script setup lang="ts">
 import { useProductsStore } from '~/stores/products'
-import { useToast } from 'vue-toastification'
+import Toast from 'vue-toastification'
 import * as yup from 'yup'
 import type { Producto } from '~/stores/products'
+
+const toast = Toast.useToast()
 
 const ADMIN_CREDENTIALS = {
   username: 'admin',
@@ -457,9 +459,6 @@ const ADMIN_CREDENTIALS = {
 const isAuthenticated = ref(false)
 const loginForm = ref({ username: '', password: '' })
 const loginError = ref('')
-
-// Toast
-const toast = useToast()
 
 // Maintenance mode
 const maintenanceMode = ref(false)
