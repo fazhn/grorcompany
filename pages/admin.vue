@@ -150,15 +150,33 @@
             <!-- Título -->
             <div>
               <label for="titulo" class="block text-sm font-semibold text-gray-700 mb-2">Título del Producto *</label>
-              <input id="titulo" v-model="form.titulo" type="text" required placeholder="Ej: Mochila Infantil Stitch"
-                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all duration-300" />
+              <input id="titulo" v-model="form.titulo" type="text" placeholder="Ej: Mochila Infantil Stitch"
+                :class="[
+                  'w-full px-4 py-3 bg-gray-50 border text-gray-900 placeholder-gray-400 rounded-xl focus:ring-2 outline-none transition-all duration-300',
+                  errors.titulo ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-gray-200 focus:border-primary-500 focus:ring-primary-500/20'
+                ]" />
+              <p v-if="errors.titulo" class="mt-1.5 text-sm text-red-600 flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                {{ errors.titulo }}
+              </p>
             </div>
 
             <!-- Descripción -->
             <div>
-              <label for="descripcion" class="block text-sm font-semibold text-gray-700 mb-2">Descripción</label>
+              <label for="descripcion" class="block text-sm font-semibold text-gray-700 mb-2">Descripción *</label>
               <textarea id="descripcion" v-model="form.descripcion" rows="3" placeholder="Ej: Disney, Escolar, Viaje..."
-                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none resize-none transition-all duration-300"></textarea>
+                :class="[
+                  'w-full px-4 py-3 bg-gray-50 border text-gray-900 placeholder-gray-400 rounded-xl focus:ring-2 outline-none resize-none transition-all duration-300',
+                  errors.descripcion ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-gray-200 focus:border-primary-500 focus:ring-primary-500/20'
+                ]"></textarea>
+              <p v-if="errors.descripcion" class="mt-1.5 text-sm text-red-600 flex items-center gap-1">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                {{ errors.descripcion }}
+              </p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
@@ -166,8 +184,11 @@
               <div>
                 <label for="categoria" class="block text-sm font-semibold text-gray-700 mb-2">Categoría *</label>
                 <div class="relative">
-                  <select id="categoria" v-model="form.categoria" required
-                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all duration-300 appearance-none cursor-pointer">
+                  <select id="categoria" v-model="form.categoria"
+                    :class="[
+                      'w-full px-4 py-3 bg-gray-50 border text-gray-900 rounded-xl focus:ring-2 outline-none transition-all duration-300 appearance-none cursor-pointer',
+                      errors.categoria ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-gray-200 focus:border-primary-500 focus:ring-primary-500/20'
+                    ]">
                     <option value="" disabled>Selecciona una categoría</option>
                     <option v-for="cat in categorias" :key="cat" :value="cat">{{ cat }}</option>
                   </select>
@@ -176,6 +197,12 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
+                <p v-if="errors.categoria" class="mt-1.5 text-sm text-red-600 flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                  </svg>
+                  {{ errors.categoria }}
+                </p>
               </div>
 
               <!-- Precio -->
@@ -183,10 +210,19 @@
                 <label for="precio" class="block text-sm font-semibold text-gray-700 mb-2">Precio (€) *</label>
                 <div class="relative">
                   <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">€</span>
-                  <input id="precio" v-model.number="form.precio" type="number" step="0.01" min="0" required
+                  <input id="precio" v-model.number="form.precio" type="number" step="0.01" min="0"
                     placeholder="0.00"
-                    class="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all duration-300 font-medium" />
+                    :class="[
+                      'w-full pl-8 pr-4 py-3 bg-gray-50 border text-gray-900 placeholder-gray-400 rounded-xl focus:ring-2 outline-none transition-all duration-300 font-medium',
+                      errors.precio ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20' : 'border-gray-200 focus:border-primary-500 focus:ring-primary-500/20'
+                    ]" />
                 </div>
+                <p v-if="errors.precio" class="mt-1.5 text-sm text-red-600 flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                  </svg>
+                  {{ errors.precio }}
+                </p>
               </div>
             </div>
 
@@ -319,29 +355,6 @@
                 {{ editingProductId ? 'Cancelar' : 'Limpiar' }}
               </button>
             </div>
-
-            <!-- Mensaje de estado -->
-            <Transition enter-active-class="transition duration-300 ease-out"
-              enter-from-class="transform scale-95 opacity-0" enter-to-class="transform scale-100 opacity-100"
-              leave-active-class="transition duration-200 ease-in" leave-from-class="transform scale-100 opacity-100"
-              leave-to-class="transform scale-95 opacity-0">
-              <div v-if="submitMessage" :class="[
-                'px-6 py-4 rounded-xl font-medium flex items-center gap-3',
-                submitStatus === 'success' ? 'bg-green-50 text-green-700 border border-green-100' : 'bg-red-50 text-red-700 border border-red-100'
-              ]">
-                <div
-                  :class="['w-6 h-6 rounded-full flex items-center justify-center shrink-0', submitStatus === 'success' ? 'bg-green-100' : 'bg-red-100']">
-                  <svg v-if="submitStatus === 'success'" class="w-4 h-4" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <svg v-else class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </div>
-                {{ submitMessage }}
-              </div>
-            </Transition>
           </form>
         </div>
 
@@ -431,19 +444,10 @@
 </template>
 
 <script setup lang="ts">
-interface Producto {
-  id: number
-  titulo: string
-  descripcion: string
-  categoria: string
-  imagen: string
-  colores: string[]
-  precio: number
-  es_nuevo: boolean
-  descuento: number
-  precio_original: number | null
-  stock: number
-}
+import { useProductsStore } from '~/stores/products'
+import { useToast } from 'vue-toastification'
+import * as yup from 'yup'
+import type { Producto } from '~/stores/products'
 
 const ADMIN_CREDENTIALS = {
   username: 'admin',
@@ -454,17 +458,25 @@ const isAuthenticated = ref(false)
 const loginForm = ref({ username: '', password: '' })
 const loginError = ref('')
 
+// Toast
+const toast = useToast()
+
 // Maintenance mode
 const maintenanceMode = ref(false)
 
 // Tab management
 const activeTab = ref<'crear' | 'gestionar'>('crear')
 
+// Products store
+const productsStore = useProductsStore()
+
 // Products management
-const productos = ref<Producto[]>([])
-const loadingProductos = ref(false)
 const deletingId = ref<number | null>(null)
 const editingProductId = ref<number | null>(null)
+
+// Computed desde el store
+const productos = computed(() => productsStore.productos)
+const loadingProductos = computed(() => productsStore.loading)
 
 const form = ref({
   titulo: '',
@@ -477,6 +489,46 @@ const form = ref({
   descuento: 0,
   precio_original: null as number | null,
   stock: 0
+})
+
+// Errores de validación
+const errors = ref<Record<string, string>>({})
+
+// Esquema de validación con Yup
+const productoSchema = yup.object().shape({
+  titulo: yup
+    .string()
+    .required('El título es obligatorio')
+    .min(3, 'El título debe tener al menos 3 caracteres')
+    .max(100, 'El título no puede exceder 100 caracteres'),
+  descripcion: yup
+    .string()
+    .required('La descripción es obligatoria')
+    .min(10, 'La descripción debe tener al menos 10 caracteres')
+    .max(500, 'La descripción no puede exceder 500 caracteres'),
+  categoria: yup
+    .string()
+    .required('La categoría es obligatoria'),
+  precio: yup
+    .number()
+    .required('El precio es obligatorio')
+    .positive('El precio debe ser mayor a 0')
+    .min(0.01, 'El precio mínimo es €0.01')
+    .max(99999.99, 'El precio máximo es €99,999.99'),
+  stock: yup
+    .number()
+    .required('El stock es obligatorio')
+    .integer('El stock debe ser un número entero')
+    .min(0, 'El stock no puede ser negativo')
+    .max(9999, 'El stock máximo es 9,999 unidades'),
+  descuento: yup
+    .number()
+    .min(0, 'El descuento no puede ser negativo')
+    .max(99, 'El descuento máximo es 99%'),
+  colores: yup
+    .array()
+    .of(yup.string())
+    .min(0, 'Debe haber al menos un color')
 })
 
 const categorias = [
@@ -496,8 +548,6 @@ const colorInput = ref('')
 const imagePreview = ref('')
 const selectedFile = ref<File | null>(null)
 const isSubmitting = ref(false)
-const submitMessage = ref('')
-const submitStatus = ref<'success' | 'error'>('success')
 
 const handleLogin = () => {
   if (loginForm.value.username === ADMIN_CREDENTIALS.username && loginForm.value.password === ADMIN_CREDENTIALS.password) {
@@ -533,25 +583,16 @@ const toggleMaintenance = async () => {
       }
     })
 
-    submitMessage.value = maintenanceMode.value
-      ? '⚠️ Modo mantenimiento ACTIVADO'
-      : '✓ Modo mantenimiento DESACTIVADO'
-    submitStatus.value = maintenanceMode.value ? 'error' : 'success'
-
-    setTimeout(() => {
-      submitMessage.value = ''
-    }, 3000)
+    if (maintenanceMode.value) {
+      toast.warning('⚠️ Modo mantenimiento ACTIVADO')
+    } else {
+      toast.success('✓ Modo mantenimiento DESACTIVADO')
+    }
   } catch (error) {
     console.error('Error al cambiar modo mantenimiento:', error)
     // Revertir el toggle si falla
     maintenanceMode.value = !maintenanceMode.value
-
-    submitMessage.value = '✗ Error al cambiar modo mantenimiento'
-    submitStatus.value = 'error'
-
-    setTimeout(() => {
-      submitMessage.value = ''
-    }, 3000)
+    toast.error('✗ Error al cambiar modo mantenimiento')
   }
 }
 
@@ -612,11 +653,42 @@ const calcularPrecioOriginalDisplay = () => {
 }
 
 const handleSubmit = async () => {
+  // Limpiar errores previos
+  errors.value = {}
+
+  // Validar formulario con Yup
+  try {
+    await productoSchema.validate(form.value, { abortEarly: false })
+  } catch (validationError: any) {
+    // Mapear errores de Yup
+    if (validationError.inner) {
+      validationError.inner.forEach((error: any) => {
+        if (error.path) {
+          errors.value[error.path] = error.message
+        }
+      })
+    }
+
+    // Mostrar primer error como toast
+    const firstError = Object.values(errors.value)[0]
+    if (firstError) {
+      toast.error(firstError)
+    }
+
+    return
+  }
+
   isSubmitting.value = true
-  submitMessage.value = ''
 
   try {
     let imagePath = form.value.imagen // Mantener imagen actual por defecto
+
+    // Validar que haya imagen
+    if (!imagePath && !selectedFile.value) {
+      toast.error('Debes seleccionar una imagen para el producto')
+      isSubmitting.value = false
+      return
+    }
 
     // Si hay un nuevo archivo seleccionado, subirlo
     if (selectedFile.value) {
@@ -629,58 +701,33 @@ const handleSubmit = async () => {
       imagePath = uploadResponse.filename
     }
 
+    const productoData = {
+      titulo: form.value.titulo,
+      descripcion: form.value.descripcion,
+      categoria: form.value.categoria,
+      imagen: imagePath,
+      colores: form.value.colores,
+      precio: form.value.precio,
+      es_nuevo: form.value.es_nuevo,
+      descuento: form.value.descuento,
+      precio_original: form.value.precio_original,
+      stock: form.value.stock
+    }
+
     if (editingProductId.value) {
       // Actualizar producto existente
-      await $fetch(`/api/productos/${editingProductId.value}`, {
-        method: 'PUT',
-        body: {
-          titulo: form.value.titulo,
-          descripcion: form.value.descripcion,
-          categoria: form.value.categoria,
-          imagen: imagePath,
-          colores: form.value.colores,
-          precio: form.value.precio,
-          es_nuevo: form.value.es_nuevo,
-          descuento: form.value.descuento,
-          precio_original: form.value.precio_original,
-          stock: form.value.stock
-        }
-      })
-
-      submitMessage.value = '✓ Producto actualizado exitosamente'
-      submitStatus.value = 'success'
+      await productsStore.updateProducto(editingProductId.value, productoData)
+      toast.success('✓ Producto actualizado exitosamente')
     } else {
       // Crear nuevo producto
-      await $fetch('/api/productos', {
-        method: 'POST',
-        body: {
-          titulo: form.value.titulo,
-          descripcion: form.value.descripcion,
-          categoria: form.value.categoria,
-          imagen: imagePath,
-          colores: form.value.colores,
-          precio: form.value.precio,
-          es_nuevo: form.value.es_nuevo,
-          descuento: form.value.descuento,
-          precio_original: form.value.precio_original,
-          stock: form.value.stock
-        }
-      })
-
-      submitMessage.value = '✓ Producto creado exitosamente'
-      submitStatus.value = 'success'
+      await productsStore.createProducto(productoData)
+      toast.success('✓ Producto creado exitosamente')
     }
 
     resetForm()
-    cargarProductos()
-
-    setTimeout(() => {
-      submitMessage.value = ''
-    }, 3000)
   } catch (error) {
     console.error('Error al guardar producto:', error)
-    submitMessage.value = editingProductId.value ? '✗ Error al actualizar el producto' : '✗ Error al crear el producto'
-    submitStatus.value = 'error'
+    toast.error(editingProductId.value ? '✗ Error al actualizar el producto' : '✗ Error al crear el producto')
   } finally {
     isSubmitting.value = false
   }
@@ -703,6 +750,7 @@ const resetForm = () => {
   imagePreview.value = ''
   selectedFile.value = null
   editingProductId.value = null
+  errors.value = {}
 
   // Reset file input
   const fileInput = document.getElementById('file-upload') as HTMLInputElement
@@ -744,18 +792,7 @@ const cancelEdit = () => {
 
 // Cargar productos
 const cargarProductos = async () => {
-  loadingProductos.value = true
-  try {
-    const data = await $fetch<any[]>('/api/productos')
-    productos.value = data.map(p => ({
-      ...p,
-      colores: typeof p.colores === 'string' ? JSON.parse(p.colores) : p.colores
-    }))
-  } catch (error) {
-    console.error('Error al cargar productos:', error)
-  } finally {
-    loadingProductos.value = false
-  }
+  await productsStore.fetchProductos()
 }
 
 // Eliminar producto
@@ -766,28 +803,11 @@ const eliminarProducto = async (id: number) => {
 
   deletingId.value = id
   try {
-    await $fetch(`/api/productos/${id}`, {
-      method: 'DELETE'
-    })
-
-    // Remover de la lista local
-    productos.value = productos.value.filter(p => p.id !== id)
-
-    // Mostrar mensaje de éxito
-    submitMessage.value = '✓ Producto eliminado exitosamente'
-    submitStatus.value = 'success'
-
-    setTimeout(() => {
-      submitMessage.value = ''
-    }, 3000)
+    await productsStore.deleteProducto(id)
+    toast.success('✓ Producto eliminado exitosamente')
   } catch (error) {
     console.error('Error al eliminar producto:', error)
-    submitMessage.value = '✗ Error al eliminar el producto'
-    submitStatus.value = 'error'
-
-    setTimeout(() => {
-      submitMessage.value = ''
-    }, 3000)
+    toast.error('✗ Error al eliminar el producto')
   } finally {
     deletingId.value = null
   }

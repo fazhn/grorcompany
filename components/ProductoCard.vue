@@ -1,7 +1,7 @@
 <template>
   <NuxtLink :to="`/producto/${producto.id}`"
     class="group bg-white rounded-2xl border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1 block">
-    <div class="relative bg-white aspect-[4/5] overflow-hidden flex items-center justify-center p-4">
+    <div class="relative bg-white aspect-[4/5] overflow-hidden flex items-center justify-center p-2">
       <img v-if="producto.imagen" :src="producto.imagen" :alt="producto.titulo"
         class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-105" loading="lazy" />
       <div v-else class="flex items-center justify-center w-full h-full bg-gray-50">
@@ -30,8 +30,16 @@
 
       <!-- Quick Action Overlay -->
       <div
-        class="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center bg-gradient-to-t from-black/50 to-transparent">
-        <span class="bg-white text-gray-900 px-6 py-2.5 rounded-full font-medium text-sm shadow-lg">
+        class="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-2 bg-gradient-to-t from-black/70 to-transparent">
+        <button @click.prevent="agregarAlCarrito"
+          :disabled="!producto.stock || producto.stock === 0"
+          class="w-full bg-primary-600 hover:bg-primary-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-4 py-2.5 rounded-xl font-bold text-sm shadow-lg transition-all flex items-center justify-center gap-2">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+          {{ producto.stock === 0 ? 'Agotado' : 'Agregar al Carrito' }}
+        </button>
+        <span class="bg-white text-gray-900 px-4 py-2 rounded-xl font-medium text-sm shadow-lg text-center">
           Ver Detalles
         </span>
       </div>
@@ -108,6 +116,9 @@
 </template>
 
 <script setup lang="ts">
+import { useCartStore } from '~/stores/cart'
+import { useToast } from 'vue-toastification'
+
 interface Producto {
   id: number
   titulo: string
@@ -126,10 +137,31 @@ const props = defineProps<{
   producto: Producto
 }>()
 
+const toast = useToast()
+
 const formatPrecio = (precio: any) => {
   if (!precio) return '0.00'
   const precioNum = typeof precio === 'string' ? parseFloat(precio) : Number(precio)
   if (isNaN(precioNum)) return '0.00'
   return precioNum.toFixed(2)
+}
+
+// Cart functionality
+const cartStore = useCartStore()
+
+const agregarAlCarrito = () => {
+  if (!props.producto.stock || props.producto.stock === 0) return
+
+  cartStore.addToCart({
+    id: props.producto.id,
+    titulo: props.producto.titulo,
+    precio: props.producto.precio,
+    imagen: props.producto.imagen,
+    stock: props.producto.stock || 0,
+    descuento: props.producto.descuento,
+    precio_original: props.producto.precio_original
+  }, 1)
+
+  toast.success(`"${props.producto.titulo}" agregado al carrito`)
 }
 </script>
