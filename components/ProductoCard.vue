@@ -12,6 +12,23 @@
         </svg>
       </div>
 
+      <!-- Badge NUEVO (izquierda) -->
+      <span v-if="producto.es_nuevo"
+        class="absolute top-3 left-3 z-10 bg-white/95 backdrop-blur-md text-gray-900 px-3 py-1 rounded-full text-[10px] md:text-xs font-bold shadow-sm border border-gray-100 flex items-center gap-1.5 ring-1 ring-black/5 uppercase tracking-wider">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        NUEVO
+      </span>
+
+      <!-- Badge DESCUENTO (derecha) -->
+      <span v-if="producto.descuento && producto.descuento > 0"
+        class="absolute top-3 right-3 z-10 bg-rose-600 text-white px-3 py-1 rounded-full text-[10px] md:text-xs font-bold shadow-lg shadow-rose-600/30 border border-rose-500/20 flex items-center gap-1">
+        <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+        </svg>
+        -{{ producto.descuento }}%
+      </span>
+
       <!-- Quick Action Overlay -->
       <div
         class="absolute inset-x-0 bottom-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center bg-gradient-to-t from-black/50 to-transparent">
@@ -34,7 +51,14 @@
       </div>
 
       <div class="flex items-start justify-between gap-2 md:gap-4 mt-2 md:mt-4">
-        <span class="text-lg md:text-xl font-bold text-gray-900">€{{ formatPrecio(producto.precio) }}</span>
+        <div class="flex flex-col">
+          <div v-if="producto.descuento && producto.descuento > 0" class="flex items-center gap-2">
+            <span class="text-lg md:text-xl font-bold text-red-600">€{{ formatPrecio(producto.precio) }}</span>
+            <span class="text-xs md:text-sm text-gray-400 line-through">€{{ formatPrecio(producto.precio_original)
+            }}</span>
+          </div>
+          <span v-else class="text-lg md:text-xl font-bold text-gray-900">€{{ formatPrecio(producto.precio) }}</span>
+        </div>
 
         <div v-if="producto.colores && producto.colores.length > 0"
           class="flex items-center -space-x-1.5 md:-space-x-2">
@@ -62,6 +86,9 @@ interface Producto {
   imagen: string
   colores: string[]
   precio: number
+  es_nuevo?: boolean
+  descuento?: number
+  precio_original?: number
 }
 
 const props = defineProps<{

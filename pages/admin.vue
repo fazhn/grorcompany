@@ -196,6 +196,33 @@
               </div>
             </div>
 
+            <!-- Opciones de Producto -->
+            <div class="grid md:grid-cols-2 gap-8">
+              <!-- Producto Nuevo -->
+              <div class="flex items-center">
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" v-model="form.es_nuevo" class="sr-only peer">
+                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500"></div>
+                  <span class="ml-3 text-sm font-semibold text-gray-700">Marcar como "Nuevo"</span>
+                </label>
+              </div>
+
+              <!-- Descuento -->
+              <div>
+                <label for="descuento" class="block text-sm font-semibold text-gray-700 mb-2">Descuento (%)</label>
+                <div class="relative">
+                  <input id="descuento" v-model.number="form.descuento" type="number" step="0.01" min="0" max="100"
+                    placeholder="0"
+                    @input="calcularPrecioOriginal"
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all duration-300" />
+                  <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">%</span>
+                </div>
+                <p v-if="form.descuento > 0" class="text-xs text-gray-500 mt-2">
+                  Precio original: €{{ calcularPrecioOriginalDisplay() }}
+                </p>
+              </div>
+            </div>
+
             <!-- Imagen -->
             <div>
               <label class="block text-sm font-semibold text-gray-700 mb-2">Imagen del Producto</label>
@@ -407,6 +434,9 @@ interface Producto {
   imagen: string
   colores: string[]
   precio: number
+  es_nuevo: boolean
+  descuento: number
+  precio_original: number | null
 }
 
 const ADMIN_CREDENTIALS = {
@@ -436,17 +466,23 @@ const form = ref({
   categoria: '',
   imagen: '',
   colores: [] as string[],
-  precio: 0
+  precio: 0,
+  es_nuevo: false,
+  descuento: 0,
+  precio_original: null as number | null
 })
 
 const categorias = [
   'Mochilas',
-  'Accesorios',
-  'Loncheras',
-  'Cartucheras',
+  'Bolsos y Accesorios',
+  'Botellas y Tuppers',
   'Peluches',
-  'Juguetes',
-  'Otro'
+  'Papelería',
+  'Ropa y Textil',
+  'Hogar y Decoración',
+  'Juguetes y Coleccionables',
+  'Tecnología y Accesorios',
+  'Regalos'
 ]
 
 const colorInput = ref('')
@@ -547,6 +583,27 @@ const eliminarColor = (index: number) => {
   form.value.colores.splice(index, 1)
 }
 
+// Funciones para descuento
+const calcularPrecioOriginal = () => {
+  if (form.value.descuento > 0 && form.value.precio > 0) {
+    // El precio actual es el precio con descuento
+    // Precio original = Precio actual / (1 - descuento/100)
+    form.value.precio_original = form.value.precio / (1 - form.value.descuento / 100)
+  } else {
+    form.value.precio_original = null
+  }
+}
+
+const calcularPrecioOriginalDisplay = () => {
+  if (form.value.precio_original) {
+    const precio = typeof form.value.precio_original === 'string'
+      ? parseFloat(form.value.precio_original)
+      : Number(form.value.precio_original)
+    return isNaN(precio) ? '0.00' : precio.toFixed(2)
+  }
+  return '0.00'
+}
+
 const handleSubmit = async () => {
   isSubmitting.value = true
   submitMessage.value = ''
@@ -575,7 +632,10 @@ const handleSubmit = async () => {
           categoria: form.value.categoria,
           imagen: imagePath,
           colores: form.value.colores,
-          precio: form.value.precio
+          precio: form.value.precio,
+          es_nuevo: form.value.es_nuevo,
+          descuento: form.value.descuento,
+          precio_original: form.value.precio_original
         }
       })
 
@@ -591,7 +651,10 @@ const handleSubmit = async () => {
           categoria: form.value.categoria,
           imagen: imagePath,
           colores: form.value.colores,
-          precio: form.value.precio
+          precio: form.value.precio,
+          es_nuevo: form.value.es_nuevo,
+          descuento: form.value.descuento,
+          precio_original: form.value.precio_original
         }
       })
 
@@ -621,7 +684,10 @@ const resetForm = () => {
     categoria: '',
     imagen: '',
     colores: [],
-    precio: 0
+    precio: 0,
+    es_nuevo: false,
+    descuento: 0,
+    precio_original: null
   }
   colorInput.value = ''
   imagePreview.value = ''
@@ -643,7 +709,10 @@ const editarProducto = (producto: Producto) => {
     categoria: producto.categoria,
     imagen: producto.imagen,
     colores: producto.colores || [],
-    precio: producto.precio
+    precio: typeof producto.precio === 'string' ? parseFloat(producto.precio) : Number(producto.precio),
+    es_nuevo: producto.es_nuevo === 1 || producto.es_nuevo === true || producto.es_nuevo === '1',
+    descuento: producto.descuento ? (typeof producto.descuento === 'string' ? parseFloat(producto.descuento) : Number(producto.descuento)) : 0,
+    precio_original: producto.precio_original ? (typeof producto.precio_original === 'string' ? parseFloat(producto.precio_original) : Number(producto.precio_original)) : null
   }
   editingProductId.value = producto.id
   imagePreview.value = producto.imagen

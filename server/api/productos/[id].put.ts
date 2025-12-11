@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
     // Actualizar producto
     await pool.query(
       `UPDATE productos
-       SET titulo = ?, descripcion = ?, categoria = ?, imagen = ?, colores = ?, precio = ?
+       SET titulo = ?, descripcion = ?, categoria = ?, imagen = ?, colores = ?, precio = ?, es_nuevo = ?, descuento = ?, precio_original = ?
        WHERE id = ?`,
       [
         body.titulo,
@@ -61,6 +61,9 @@ export default defineEventHandler(async (event) => {
         body.imagen || productoActual.imagen, // Mantener imagen actual si no se proporciona nueva
         coloresJSON,
         body.precio || 0,
+        body.es_nuevo || false,
+        body.descuento || 0,
+        body.precio_original || null,
         id
       ]
     )

@@ -3,7 +3,7 @@ import pool from '~/server/utils/db'
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event)
-    const { titulo, descripcion, categoria, imagen, colores, precio } = body
+    const { titulo, descripcion, categoria, imagen, colores, precio, es_nuevo, descuento, precio_original } = body
 
     // Validación básica
     if (!titulo || !precio) {
@@ -16,8 +16,8 @@ export default defineEventHandler(async (event) => {
     const coloresJson = JSON.stringify(colores || [])
 
     const [result] = await pool.query(
-      'INSERT INTO productos (titulo, descripcion, categoria, imagen, colores, precio) VALUES (?, ?, ?, ?, ?, ?)',
-      [titulo, descripcion, categoria, imagen, coloresJson, precio]
+      'INSERT INTO productos (titulo, descripcion, categoria, imagen, colores, precio, es_nuevo, descuento, precio_original) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+      [titulo, descripcion, categoria, imagen, coloresJson, precio, es_nuevo || false, descuento || 0, precio_original || null]
     )
 
     return {

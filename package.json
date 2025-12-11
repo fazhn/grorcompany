@@ -9,7 +9,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "setup-settings": "tsx server/scripts/setup-settings.ts"
+    "setup-settings": "tsx server/scripts/setup-settings.ts",
+    "add-product-features": "tsx server/scripts/add-product-features.ts"
   },
   "dependencies": {
     "minio": "^8.0.6",
