@@ -117,7 +117,6 @@
 
 <script setup lang="ts">
 import { useCartStore } from '~/stores/cart'
-import Toast from 'vue-toastification'
 
 interface Producto {
   id: number
@@ -137,7 +136,8 @@ const props = defineProps<{
   producto: Producto
 }>()
 
-const toast = Toast.useToast()
+const { $toast } = useNuxtApp()
+const toast = $toast
 
 const formatPrecio = (precio: any) => {
   if (!precio) return '0.00'

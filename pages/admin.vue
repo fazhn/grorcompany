@@ -445,11 +445,11 @@
 
 <script setup lang="ts">
 import { useProductsStore } from '~/stores/products'
-import Toast from 'vue-toastification'
 import * as yup from 'yup'
 import type { Producto } from '~/stores/products'
 
-const toast = Toast.useToast()
+const { $toast } = useNuxtApp()
+const toast = $toast
 
 const ADMIN_CREDENTIALS = {
   username: 'admin',

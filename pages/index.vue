@@ -470,13 +470,13 @@
 <script setup lang="ts">
 import { useProductsStore } from '~/stores/products'
 import { useCartStore } from '~/stores/cart'
-import Toast from 'vue-toastification'
 import type { Producto } from '~/stores/products'
 
 // Stores
 const productsStore = useProductsStore()
 const cartStore = useCartStore()
-const toast = Toast.useToast()
+const { $toast } = useNuxtApp()
+const toast = $toast
 
 // Inicializar datos
 onMounted(async () => {

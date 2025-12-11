@@ -384,7 +384,6 @@
 <script setup lang="ts">
 import { useProductsStore } from '~/stores/products'
 import { useCartStore } from '~/stores/cart'
-import Toast from 'vue-toastification'
 import type { Producto } from '~/stores/products'
 
 const route = useRoute()
@@ -393,7 +392,8 @@ const productId = Number(route.params.id)
 // Stores
 const productsStore = useProductsStore()
 const cartStore = useCartStore()
-const toast = Toast.useToast()
+const { $toast } = useNuxtApp()
+const toast = $toast
 
 // State
 const cantidad = ref(1)

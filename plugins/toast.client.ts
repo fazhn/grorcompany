@@ -1,4 +1,4 @@
-import Toast, { type PluginOptions } from 'vue-toastification'
+import Toast, { type PluginOptions, useToast } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
 import '~/assets/css/toast.css'
 
@@ -22,4 +22,11 @@ export default defineNuxtPlugin((nuxtApp) => {
   }
 
   nuxtApp.vueApp.use(Toast, options)
+
+  // Exponer toast en el contexto de Nuxt
+  return {
+    provide: {
+      toast: useToast()
+    }
+  }
 })
