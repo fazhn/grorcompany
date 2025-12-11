@@ -221,6 +221,24 @@
                   Precio original: €{{ calcularPrecioOriginalDisplay() }}
                 </p>
               </div>
+
+              <!-- Stock -->
+              <div>
+                <label for="stock" class="block text-sm font-semibold text-gray-700 mb-2">Stock Disponible</label>
+                <div class="relative">
+                  <input id="stock" v-model.number="form.stock" type="number" min="0"
+                    placeholder="0"
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 outline-none transition-all duration-300" />
+                  <svg class="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">
+                  <span v-if="form.stock === 0" class="text-red-600 font-medium">⚠️ Sin stock</span>
+                  <span v-else-if="form.stock < 5" class="text-orange-600 font-medium">⚠️ Stock bajo</span>
+                  <span v-else class="text-green-600 font-medium">✓ Stock disponible</span>
+                </p>
+              </div>
             </div>
 
             <!-- Imagen -->
@@ -437,6 +455,7 @@ interface Producto {
   es_nuevo: boolean
   descuento: number
   precio_original: number | null
+  stock: number
 }
 
 const ADMIN_CREDENTIALS = {
@@ -469,7 +488,8 @@ const form = ref({
   precio: 0,
   es_nuevo: false,
   descuento: 0,
-  precio_original: null as number | null
+  precio_original: null as number | null,
+  stock: 0
 })
 
 const categorias = [
@@ -635,7 +655,8 @@ const handleSubmit = async () => {
           precio: form.value.precio,
           es_nuevo: form.value.es_nuevo,
           descuento: form.value.descuento,
-          precio_original: form.value.precio_original
+          precio_original: form.value.precio_original,
+          stock: form.value.stock
         }
       })
 
@@ -654,7 +675,8 @@ const handleSubmit = async () => {
           precio: form.value.precio,
           es_nuevo: form.value.es_nuevo,
           descuento: form.value.descuento,
-          precio_original: form.value.precio_original
+          precio_original: form.value.precio_original,
+          stock: form.value.stock
         }
       })
 
@@ -687,7 +709,8 @@ const resetForm = () => {
     precio: 0,
     es_nuevo: false,
     descuento: 0,
-    precio_original: null
+    precio_original: null,
+    stock: 0
   }
   colorInput.value = ''
   imagePreview.value = ''
@@ -712,7 +735,8 @@ const editarProducto = (producto: Producto) => {
     precio: typeof producto.precio === 'string' ? parseFloat(producto.precio) : Number(producto.precio),
     es_nuevo: producto.es_nuevo === 1 || producto.es_nuevo === true || producto.es_nuevo === '1',
     descuento: producto.descuento ? (typeof producto.descuento === 'string' ? parseFloat(producto.descuento) : Number(producto.descuento)) : 0,
-    precio_original: producto.precio_original ? (typeof producto.precio_original === 'string' ? parseFloat(producto.precio_original) : Number(producto.precio_original)) : null
+    precio_original: producto.precio_original ? (typeof producto.precio_original === 'string' ? parseFloat(producto.precio_original) : Number(producto.precio_original)) : null,
+    stock: producto.stock ? (typeof producto.stock === 'string' ? parseInt(producto.stock) : Number(producto.stock)) : 0
   }
   editingProductId.value = producto.id
   imagePreview.value = producto.imagen
