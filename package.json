@@ -11,8 +11,10 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "minio": "^8.0.6",
     "mysql2": "^3.15.3",
     "nuxt": "^3.20.2",
+    "sharp": "^0.34.5",
     "vue": "^3.5.25",
     "vue-router": "^4.6.3"
   },

@@ -4,4 +4,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
 
   modules: ['@nuxtjs/tailwindcss'],
+
+  runtimeConfig: {
+    // Variables privadas del servidor (solo disponibles en server-side)
+    minioServerUrl: process.env.MINIO_SERVER_URL,
+    minioRootUser: process.env.MINIO_ROOT_USER,
+    minioRootPassword: process.env.MINIO_ROOT_PASSWORD,
+    minioBucket: process.env.MINIO_BUCKET,
+  },
 })
